@@ -1002,6 +1002,121 @@
       min-height: 170px;
     }
 
+    .cv.attr-gauges {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+      gap: 12px;
+      min-height: 0;
+      margin-top: 14px;
+      flex: 0 0 auto;
+    }
+
+    .attr-gauge-card {
+      min-width: 0;
+      padding: 12px 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: var(--r-md);
+      background: var(--n-50);
+      text-align: center;
+    }
+
+    .attr-gauge-card h4 {
+      min-height: 34px;
+      color: var(--text-2);
+      font-size: 11.5px;
+      font-weight: 700;
+      line-height: 1.35;
+      text-wrap: balance;
+    }
+
+    .attr-gauge {
+      display: block;
+      width: min(100%, 118px);
+      height: 66px;
+      margin: 5px auto 0;
+      overflow: visible;
+    }
+
+    .attr-gauge-track,
+    .attr-gauge-value {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+    }
+
+    .attr-gauge-track {
+      stroke: var(--n-200);
+    }
+
+    .attr-gauge-value {
+      stroke: var(--red);
+    }
+
+    .attr-gauge text {
+      fill: var(--ink);
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .attr-gauge-meta {
+      margin-top: 2px;
+      color: var(--text-3);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    .cv.traffic-lights {
+      display: grid;
+      align-content: center;
+      gap: 9px;
+      min-height: 170px;
+      padding: 8px 0;
+    }
+
+    .traffic-light-row {
+      display: grid;
+      grid-template-columns: 16px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 42px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm);
+      background: var(--n-50);
+    }
+
+    .traffic-light-bulb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--traffic-color);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--traffic-color) 14%, transparent);
+    }
+
+    .traffic-light-label {
+      min-width: 0;
+      color: var(--text-2);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .traffic-light-value {
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .traffic-light-n {
+      margin-left: 4px;
+      color: var(--text-3);
+      font-size: 10px;
+      font-weight: 500;
+    }
+
     .card h3,
     .card-hd>h3 {
       font-size: 15px;
@@ -1044,6 +1159,16 @@
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: 12px;
+    }
+
+    #q8_chips .scorechip {
+      min-height: 26px;
+      padding: 4px 7px;
+      font-size: 8.5px;
+    }
+
+    #q8_chips .scorechip b {
+      font-size: 11px;
     }
 
     /* Columna de dos tarjetas apiladas. */
@@ -3335,11 +3460,11 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
         <div class="scale-sum" id="${q.id}_sum"></div>
         ${foot(q)}`;
 
-    /* Parrilla de atributos: una barra por atributo, ordenadas de mejor a peor. */
+    /* Parrilla de atributos: una mini-escala por atributo. */
     const cardGrid = (q, d) => `${art(q, d, 'span3')}
         <div class="card-hd"><h3>${esc(q.t)}</h3><div class="chips" id="${q.id}_chips"></div></div>
         <div class="scale-leg" id="${q.id}_leg"></div>
-        <div class="cv" id="${q.id}_cv"><canvas id="cv-${q.id}"></canvas></div>
+        <div class="cv attr-gauges" id="${q.id}_cv"></div>
         ${foot(q)}`;
 
     function buildSections() {
@@ -3347,13 +3472,13 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
 
       /* 01 · KPI digitales ------------------------------------------ */
       s.push(`<section id="visibilidad">
-        <div class="s-head" data-reveal><span>01</span><h2>KPI <em>digitales</em></h2></div>
-        <p class="s-lede" data-reveal>Cuánta gente vio la activación en la app, cuánta participó y cuánta llegó
-          hasta el final de la encuesta. Son cifras del panel de la campaña: no dependen de los filtros.</p>
+        <div class="s-head" data-reveal><span>01</span><h2>KPIs <em>app de Samplia</em></h2></div>
+        <p class="s-lede" data-reveal>Rendimiento de la activación en la app de Samplia: vistas, clics, participaciones
+          y encuestas completadas. Son cifras del panel de campaña y no dependen de los filtros.</p>
         <div class="grid">
           <article class="card card--dark span3" id="c-vis" data-reveal="card">
             <div class="card-hd">
-              <h3>Del impacto a la encuesta</h3>
+              <h3>Interacción con la activación</h3>
               <div class="chips" id="vis_chips"></div>
             </div>
             <div class="vis-tot" id="vis_tot"></div>
@@ -3612,7 +3737,8 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
     /* Por respuesta, no por posición: «Compradores Potenciales» en azul, a petición. */
     const trioColor = label => /^compradores/i.test(label) ? '#375395' : /^no\b/i.test(label) ? C.red : C.n500;
     const trioRank = label => /^no\b/i.test(label) ? 0 : /^compradores/i.test(label) ? 2 : 1;
-    function renderTrio(q) {
+    function renderTrio(q, opt) {
+      opt = opt || {};
       const host = document.getElementById(q.id + '_trio');
       if (!host) return;
       const st = catRows(VIEW, q.col, { keepOrder: true });
@@ -3631,7 +3757,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
           <div class="mini-l">${esc(r.label)}</div>
           <div class="mini-v" style="color:${/^compradores/i.test(r.label) ? col : 'var(--ink)'}">${pf(p, 0)}</div>
           <div class="mini-bar"><i style="width:${p}%;background:${col}"></i></div>
-          <div class="mini-s">${nf(r.value)} ${r.value === 1 ? 'persona' : 'personas'}</div>
+          ${opt.showCounts === false ? '' : `<div class="mini-s">${nf(r.value)} ${r.value === 1 ? 'persona' : 'personas'}</div>`}
         </div>`;
       }).join('');
     }
@@ -3859,7 +3985,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
           },
           plugins: {
             legend: {
-              display: true, position: 'bottom',
+              display: opt.showLegend !== false, position: 'bottom',
               labels: {
                 usePointStyle: true, pointStyle: 'circle', boxWidth: 8, boxHeight: 8,
                 padding: 16, font: { size: 11.5, weight: 700 }, color: C.ink
@@ -3953,7 +4079,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       const groups = scaleGroups(lo, hi);
       const leg = document.getElementById(id + '_leg');
       const sum = document.getElementById(id + '_sum');
-      if (leg) leg.innerHTML = (groups && st.n) ? groups.map(g =>
+      if (leg) leg.innerHTML = (opt.showLegend !== false && groups && st.n) ? groups.map(g =>
         `<span class="lg"><i style="background:${g.c}"></i>${g.t} <em>(${g.a === g.b ? g.a : g.a + '–' + g.b})</em></span>`).join('') : '';
       if (sum) sum.innerHTML = (groups && st.n) ? groups.map(g => {
         const n = st.hist.slice(g.a - lo, g.b - lo + 1).reduce((x, y) => x + y, 0);
@@ -3979,7 +4105,8 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       st.hist.forEach((n, i) => { const v = lo + i; if (v >= 9) r += n; else if (v >= 7) p += n; else d += n; });
       return { st, d, p, r, idx: st.n ? pct(r, st.n) - pct(d, st.n) : 0 };
     }
-    function renderNPS(q) {
+    function renderNPS(q, opt) {
+      opt = opt || {};
       const id = q.id;
       const o = npsOf(VIEW, q.col), st = o.st;
       const box = document.getElementById(id + '_cv');
@@ -3987,6 +4114,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       const host = document.getElementById(id + '_nps');
       if (charts['cv-' + id]) { charts['cv-' + id].destroy(); delete charts['cv-' + id]; }
       if (box) box.style.height = '240px';
+      if (box) box.style.display = opt.showBars === false ? 'none' : '';
       const leg = document.getElementById(id + '_leg'); if (leg) leg.innerHTML = '';
       const sum = document.getElementById(id + '_sum'); if (sum) sum.innerHTML = '';
       setBase(id, st.n, VIEW.length);
@@ -4012,7 +4140,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
           </div>`;
       }
       const colors = st.hist.map((_, i) => { const v = st.lo + i; return v >= 9 ? NPS_COL.r : v >= 7 ? NPS_COL.p : NPS_COL.d; });
-      scaleBars(id, st, colors);
+      if (opt.showBars !== false) scaleBars(id, st, colors);
     }
 
     /* ── Pregunta adaptable ─────────────────────────────────────── */
@@ -4022,7 +4150,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       opt = opt || {};
       const host = document.getElementById(q.id + '_nps');
       const isScale = DATA.kind[q.col] === 'scale';
-      if (isScale && opt.nps && (DATA.scale[q.col] || [])[1] === 10) return renderNPS(q);
+      if (isScale && opt.nps && (DATA.scale[q.col] || [])[1] === 10) return renderNPS(q, opt);
       if (host) { host.hidden = true; host.innerHTML = ''; }
       if (isScale) return renderScale(q, opt);
       const leg = document.getElementById(q.id + '_leg'); if (leg) leg.innerHTML = '';
@@ -4034,6 +4162,55 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
           return `<span class="scorechip">${opt.posLabel || 'Respuestas positivas'} <b>${pf(pct(pos, st.base))}</b></span>`;
         }
       });
+    }
+
+    function renderTrafficLight(q) {
+      const id = q.id;
+      const box = document.getElementById(id + '_cv');
+      const chips = document.getElementById(id + '_chips');
+      if (charts['cv-' + id]) { charts['cv-' + id].destroy(); delete charts['cv-' + id]; }
+      if (!box) return;
+      box.classList.add('traffic-lights');
+      const groups = [
+        { label: 'Mejor que otras marcas', color: '#2F9E6B', n: 0 },
+        { label: 'Igual que otras marcas', color: '#D49A19', n: 0 },
+        { label: 'Peor que otras marcas', color: C.red, n: 0 }
+      ];
+      let base = 0;
+      if (DATA.kind[q.col] === 'scale') {
+        const [lo, hi] = DATA.scale[q.col] || [1, 10];
+        const st = scaleStats(VIEW, q.col, lo, hi);
+        const range = hi - lo || 1;
+        st.hist.forEach((n, i) => {
+          const value = lo + i;
+          const group = value <= lo + range * .4 ? groups[2]
+            : value >= lo + range * .6 ? groups[0] : groups[1];
+          group.n += n;
+          base += n;
+        });
+      } else {
+        const st = catRows(VIEW, q.col);
+        base = st.base;
+        st.rows.forEach(row => {
+          const rank = sentRank(row.label);
+          const group = rank <= 1 ? groups[0] : rank >= 3 ? groups[2] : groups[1];
+          group.n += row.value;
+        });
+      }
+      if (chips) chips.innerHTML = '';
+      setBase(id, base, VIEW.length);
+      box.style.height = '';
+      if (!base) {
+        box.classList.remove('traffic-lights');
+        return failIn(box, emptyMsg('Ninguna respuesta con el filtro activo.'));
+      }
+      clearFail(box);
+      box.innerHTML = groups.map(group =>
+        `<div class="traffic-light-row" role="img" aria-label="${esc(group.label + ': ' + pf(pct(group.n, base)))}">
+          <span class="traffic-light-bulb" style="--traffic-color:${group.color}" aria-hidden="true"></span>
+          <span class="traffic-light-label">${group.label}</span>
+          <span class="traffic-light-value">${pf(pct(group.n, base))}<span class="traffic-light-n">${nf(group.n)}</span></span>
+        </div>`).join('');
     }
 
     /* ── Treemap o barras ───────────────────────────────────────── */
@@ -4055,9 +4232,8 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
     }
 
     /* ── Parrilla de atributos ──────────────────────────────────── */
-    /* Escala numérica: una barra por atributo con su nota media, de la más
-       alta a la más baja; el atributo más flojo va en gris oscuro. Si la hoja trae etiquetas («Muy bueno», «Regular»…),
-       barra apilada al 100 % por atributo, de lo positivo a lo negativo. */
+    /* Cada atributo usa una mini-escala para mostrar la media numérica o,
+       si la hoja trae etiquetas, el porcentaje de valoraciones positivas. */
     function attrStats(rows) {
       return ATTRS.map(a => {
         if (DATA.kind[a.col] === 'scale') {
@@ -4076,7 +4252,6 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       const box = document.getElementById(id + '_cv');
       const chips = document.getElementById(id + '_chips');
       const leg = document.getElementById(id + '_leg');
-      if (charts['cv-' + id]) { charts['cv-' + id].destroy(); delete charts['cv-' + id]; }
       const all = attrStats(VIEW);
       const base = all.reduce((m, x) => Math.max(m, x.n), 0);
       setBase(id, base, VIEW.length);
@@ -4089,96 +4264,33 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       clearFail(box);
       const numeric = all.every(x => x.scale);
       const rows = (numeric ? all : all.filter(x => !x.scale))
-        .sort((x, y) => numeric ? y.mean - x.mean : y.pos - x.pos);
-      const best = rows[0], worst = rows[rows.length - 1];
+        .sort((x, y) => x.a.t.localeCompare(y.a.t, 'es', { sensitivity: 'base' }));
+      const ranked = rows.slice().sort((x, y) => numeric ? y.mean - x.mean : y.pos - x.pos);
+      const best = ranked[0], worst = ranked[ranked.length - 1];
       const fmt = x => numeric ? df(x.mean, 2) + ' / ' + x.hi : pf(x.pos, 0) + ' positivo';
       if (chips) chips.innerHTML = rows.length > 1
         ? `<span class="scorechip">Mejor valorado <b>${esc(best.a.t)}</b> <b>${fmt(best)}</b></span>`
           + `<span class="scorechip">A mejorar <b>${esc(worst.a.t)}</b> <b>${fmt(worst)}</b></span>` : '';
-      if (box) box.style.height = hBarH(rows.length) + (numeric ? 0 : 40) + 'px';
-      const TICK_FS = 11.5;
-      const boxW = (box && box.clientWidth) || 800;
-      const budget = Math.max(88, Math.min(260, boxW * 0.3));
-      const mctx = measureCtx(TICK_FS, 600);
-      const labels = rows.map(x => wrapLabel(x.a.t, mctx, budget, 2));
-      const yAxis = {
-        stacked: !numeric,
-        grid: { display: false, drawBorder: false }, border: { display: false },
-        ticks: { font: { size: TICK_FS, weight: 600 }, color: C.ink, padding: 6, autoSkip: false }
-      };
-
-      if (numeric) {
-        const hi = Math.max(...rows.map(x => x.hi));
-        const colors = rows.map((x, i) => (rows.length > 2 && i === rows.length - 1) ? '#444444'
-          : BLUE_RAMP[Math.min(BLUE_RAMP.length - 1, i)]);
-        if (leg) leg.innerHTML = `<span class="lg"><i style="background:${C.red}"></i>Nota media por atributo <em>(1 a ${hi})</em></span>`
-          + (rows.length > 2 ? `<span class="lg"><i style="background:#444444"></i>Atributo más flojo</span>` : '');
-        return mk('cv-' + id, {
-          type: 'bar',
-          data: { labels, datasets: [{ data: rows.map(x => +x.mean.toFixed(2)), backgroundColor: colors, borderRadius: 5, maxBarThickness: 26 }] },
-          options: {
-            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-            layout: { padding: { right: 56, top: 2, bottom: 2 } },
-            scales: { x: { display: false, beginAtZero: true, max: hi }, y: yAxis },
-            plugins: {
-              ...noLegend,
-              tooltip: tip({
-                callbacks: {
-                  title: c => rows[c[0].dataIndex].a.t,
-                  label: c => 'Media ' + df(rows[c.dataIndex].mean, 2) + ' / ' + rows[c.dataIndex].hi
-                    + ' · ' + nf(rows[c.dataIndex].n) + ' valoraciones'
-                }
-              }),
-              datalabels: {
-                anchor: 'end', align: 'end', offset: 6, clamp: true,
-                color: C.ink, font: { size: 11.5, weight: 800 },
-                formatter: v => df(v, 2)
-              }
-            }
-          }
-        });
-      }
-
-      /* Categórica: categorías comunes ordenadas de lo positivo a lo negativo. */
-      const catSet = new Map();
-      rows.forEach(x => x.st.rows.forEach(r => catSet.set(r.label, true)));
-      const cats = [...catSet.keys()].sort((p, r) => sentRank(p) - sentRank(r));
-      const colors = cats.map(l => NEUTRAL_RE.test(l) ? C.n300 : sentColor(l));
-      mk('cv-' + id, {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: cats.map((label, ci) => ({
-            label,
-            data: rows.map(x => { const r = x.st.rows.find(r => r.label === label); return r ? pct(r.value, x.st.base) : 0; }),
-            backgroundColor: colors[ci], borderColor: '#fff', borderWidth: 1.5, borderSkipped: false, maxBarThickness: 26
-          }))
-        },
-        options: {
-          indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-          layout: { padding: { right: 8, top: 2, bottom: 2 } },
-          scales: { x: { stacked: true, display: false, min: 0, max: 100 }, y: yAxis },
-          plugins: {
-            legend: {
-              display: true, position: 'bottom',
-              labels: { usePointStyle: true, pointStyle: 'circle', boxWidth: 8, boxHeight: 8, padding: 14, font: { size: 11.5, weight: 700 }, color: C.ink }
-            },
-            tooltip: tip({
-              displayColors: true,
-              callbacks: {
-                title: c => rows[c[0].dataIndex].a.t,
-                label: c => c.dataset.label + ': ' + pf(c.parsed.x)
-              }
-            }),
-            datalabels: {
-              display: c => c.dataset.data[c.dataIndex] >= 8,
-              color: c => inkOn(colors[c.datasetIndex]),
-              font: { size: 11, weight: 800 },
-              formatter: v => pf(v, 0)
-            }
-          }
-        }
-      });
+      if (!box) return;
+      box.style.height = '';
+      box.innerHTML = rows.map(x => {
+        const value = numeric ? x.mean : x.pos;
+        const progress = numeric
+          ? Math.max(0, Math.min(100, (x.mean - x.lo) / (x.hi - x.lo) * 100))
+          : Math.max(0, Math.min(100, x.pos));
+        const label = numeric ? df(x.mean, 2) + ' / ' + x.hi : pf(x.pos, 0);
+        const detail = numeric ? 'Media · escala ' + x.lo + '–' + x.hi : 'Valoración positiva';
+        return `<article class="attr-gauge-card">
+          <h4>${esc(x.a.t)}</h4>
+          <svg class="attr-gauge" viewBox="0 0 100 60" role="img" aria-label="${esc(x.a.t + ': ' + label)}">
+            <path class="attr-gauge-track" d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100"></path>
+            <path class="attr-gauge-value" d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100"
+              stroke-dasharray="100" stroke-dashoffset="${100 - progress}"></path>
+            <text x="50" y="43" text-anchor="middle">${label}</text>
+          </svg>
+          <p class="attr-gauge-meta">${detail}</p>
+        </article>`;
+      }).join('');
     }
 
     /* ── KPI digitales de la campaña ────────────────────────────── */
@@ -4247,7 +4359,8 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
         + ' · no se ven afectados por los filtros del informe.'
         + (VIS_STATE === 'demo' ? ' Serie de demostración: la hoja del panel no respondió.' : '');
       clearFail(box);
-      const dual = has('v') && series.length > 1;
+      const hasPrimaryAxis = series.some(sr => sr.k === 'v' || sr.k === 'e');
+      const hasSecondaryAxis = series.some(sr => sr.k === 'c' || sr.k === 'p');
       const darkGrid = 'rgba(255,255,255,.07)';
       const darkTick = 'rgba(255,255,255,.45)';
       const darkLabel = 'rgba(255,255,255,.55)';
@@ -4282,7 +4395,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
               pointBorderColor: isV ? col : col,
               pointBorderWidth: isV ? 0 : 0,
               fill: isV ? 'origin' : false,
-              yAxisID: 'y',
+              yAxisID: sr.k === 'c' || sr.k === 'p' ? 'y1' : 'y',
               order: isV ? 2 : (isE ? 0 : 1)
             };
           })
@@ -4293,10 +4406,30 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
           layout: { padding: { top: 14, right: 10, bottom: 4, left: 4 } },
           scales: {
             y: {
+              display: hasPrimaryAxis,
               beginAtZero: true,
               grid: { color: darkGrid, drawBorder: false },
               border: { display: false },
-              title: { display: false },
+              title: {
+                display: hasPrimaryAxis,
+                text: 'Vistas y encuestas',
+                color: darkLabel,
+                font: { size: 10, weight: 600 }
+              },
+              ticks: { font: { size: 11, weight: 600 }, color: darkTick, callback: v => nf(v) }
+            },
+            y1: {
+              display: hasSecondaryAxis,
+              position: 'right',
+              beginAtZero: true,
+              grid: { drawOnChartArea: false },
+              border: { display: false },
+              title: {
+                display: hasSecondaryAxis,
+                text: 'Clics y participaciones',
+                color: darkLabel,
+                font: { size: 10, weight: 600 }
+              },
               ticks: { font: { size: 11, weight: 600 }, color: darkTick, callback: v => nf(v) }
             },
             x: {
@@ -4643,8 +4776,8 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       renderAge();
 
       /* 3 · ¿conocías el producto? */
-      renderStack(Q.q1, {
-        rank: sentRank, colorFn: r => sentColor(r.label),
+      renderBarH(Q.q1, {
+        colorFn: r => norm(r.label) === 'no lo conocia' ? C.red : C.n300,
         chips: st => {
           const k = st.rows.filter(r => isPositive(r.label)).reduce((a, r) => a + r.value, 0);
           return `<span class="scorechip">Lo conocían <b>${pf(pct(k, st.base))}</b></span>`;
@@ -4655,16 +4788,16 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       renderBarH(Q.q2, { chips: topChip });
 
       /* 5 · nota del sándwich, de 1 a 10 */
-      renderAuto(Q.q3, { meanLabel: 'Media', bench: BENCH_NOTA, posLabel: 'Valoración positiva' });
+      renderAuto(Q.q3, { meanLabel: 'Media', bench: BENCH_NOTA, posLabel: 'Valoración positiva', showLegend: false });
 
       /* 6 · parrilla de atributos del pan */
       renderGrid(Q.q4);
 
       /* 7 · sabor frente a otras marcas */
-      renderAuto(Q.q5, { meanLabel: 'Media', posLabel: 'Mejor que otras marcas' });
+      renderTrafficLight(Q.q5);
 
       /* 8 · probabilidad de compra */
-      renderTrio(Q.q6);
+      renderTrio(Q.q6, { showCounts: false });
 
       /* 9 · variedades que interesa probar */
       renderFlex(Q.q7, { chips: topChip });
@@ -4679,7 +4812,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       });
 
       /* 11 · recomendación */
-      renderAuto(Q.q9, { nps: true, meanLabel: 'Media', posLabel: 'Lo recomendarían' });
+      renderAuto(Q.q9, { nps: true, meanLabel: 'Media', posLabel: 'Lo recomendarían', showBars: false });
 
       QKEYS.forEach(k => setNote(Q[k]));
       renderReads();
