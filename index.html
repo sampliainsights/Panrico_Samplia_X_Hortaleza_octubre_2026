@@ -3827,7 +3827,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
               g.addColorStop(0, opt.gradient[0]); g.addColorStop(1, opt.gradient[1]);
               return g;
             }) : colors,
-            borderRadius: 5, maxBarThickness: 26
+            borderRadius: 999, borderSkipped: false, maxBarThickness: 18
           }]
         },
         options: {
@@ -3917,7 +3917,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
           datasets: [{
             data: vals,
             backgroundColor: C.b500,
-            borderRadius: 6, maxBarThickness: 84
+            borderRadius: 999, borderSkipped: false, maxBarThickness: 24
           }]
         },
         options: {
@@ -3981,8 +3981,8 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
             data: [pct(r.value, st.base)],
             count: r.value,
             backgroundColor: colors[i],
-            borderColor: '#fff', borderWidth: 2, borderRadius: 6, borderSkipped: false,
-            maxBarThickness: 64
+            borderColor: '#fff', borderWidth: 2, borderRadius: 999, borderSkipped: false,
+            maxBarThickness: 40
           }))
         },
         options: {
@@ -4042,7 +4042,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       for (let v = st.lo; v <= st.hi; v++) labels.push(String(v));
       mk('cv-' + id, {
         type: 'bar',
-        data: { labels, datasets: [{ data: st.hist, backgroundColor: colors, borderRadius: 6, maxBarThickness: 54 }] },
+        data: { labels, datasets: [{ data: st.hist, backgroundColor: colors, borderRadius: 999, borderSkipped: false, maxBarThickness: 36 }] },
         options: {
           responsive: true, maintainAspectRatio: false,
           layout: { padding: { top: 24 } },
