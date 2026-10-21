@@ -2691,13 +2691,19 @@
     [hidden] { display: none !important; }
     .scale-leg:empty, .card .sub:empty { display: none; }
 
-    /* Tres KPI: una fila de tres hasta móvil. */
-    .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    @media (max-width: 1560px) { .kpi:nth-child(-n+4) { border-bottom: 0; } }
+    /* Cuatro KPI: una fila de cuatro hasta móvil. */
+    .kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .kpi:last-child .kpi-v { color: var(--red); }
+    @media (max-width: 1560px) {
+      .kpi:nth-child(-n+4) { border-bottom: 0; }
+      .kpi:nth-child(3n) { border-right: 1px solid var(--line); }
+      .kpi:nth-child(4n) { border-right: 0; }
+    }
     @media (max-width: 980px) {
-      .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .kpi:nth-child(n) { border-bottom: 0; border-right: 1px solid var(--line); }
-      .kpi:last-child { border-right: 0; }
+      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .kpi:nth-child(n) { border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); }
+      .kpi:nth-child(2n) { border-right: 0; }
+      .kpi:nth-last-child(-n+2) { border-bottom: 0; }
     }
     @media (max-width: 720px) {
       .kpis { grid-template-columns: minmax(0, 1fr); }
@@ -3389,6 +3395,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
     /* Benchmark pan de molde. */
     const BENCH_NOTA = 8.0;
     const BENCH_INTEN = 67;
+    const BENCH_RECOMENDACION = 7.8;
     const BENCH_TXT = 'pan de molde';
 
     const Q = {
@@ -3827,7 +3834,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
               g.addColorStop(0, opt.gradient[0]); g.addColorStop(1, opt.gradient[1]);
               return g;
             }) : colors,
-            borderRadius: 999, borderSkipped: false, maxBarThickness: 18
+            borderRadius: 999, borderSkipped: false, maxBarThickness: 12
           }]
         },
         options: {
@@ -3912,12 +3919,22 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       const vals = BANDS.map(b => counts[b]);
       mk('cv-edad', {
         type: 'bar',
+        plugins: [{
+          id: 'age-bar-shadow',
+          beforeDatasetDraw: chart => {
+            chart.ctx.save();
+            chart.ctx.shadowColor = 'rgba(35, 61, 107, 0.22)';
+            chart.ctx.shadowBlur = 10;
+            chart.ctx.shadowOffsetY = 3;
+          },
+          afterDatasetDraw: chart => chart.ctx.restore()
+        }],
         data: {
           labels: BANDS,
           datasets: [{
             data: vals,
             backgroundColor: C.b500,
-            borderRadius: 999, borderSkipped: false, maxBarThickness: 24
+            borderRadius: 999, borderSkipped: false, maxBarThickness: 14
           }]
         },
         options: {
@@ -3982,7 +3999,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
             count: r.value,
             backgroundColor: colors[i],
             borderColor: '#fff', borderWidth: 2, borderRadius: 999, borderSkipped: false,
-            maxBarThickness: 40
+            maxBarThickness: 20
           }))
         },
         options: {
@@ -4042,7 +4059,7 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       for (let v = st.lo; v <= st.hi; v++) labels.push(String(v));
       mk('cv-' + id, {
         type: 'bar',
-        data: { labels, datasets: [{ data: st.hist, backgroundColor: colors, borderRadius: 999, borderSkipped: false, maxBarThickness: 36 }] },
+        data: { labels, datasets: [{ data: st.hist, backgroundColor: colors, borderRadius: 999, borderSkipped: false, maxBarThickness: 16 }] },
         options: {
           responsive: true, maintainAspectRatio: false,
           layout: { padding: { top: 24 } },
@@ -4127,7 +4144,9 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       const leg = document.getElementById(id + '_leg'); if (leg) leg.innerHTML = '';
       const sum = document.getElementById(id + '_sum'); if (sum) sum.innerHTML = '';
       setBase(id, st.n, VIEW.length);
-      if (chips) chips.innerHTML = st.n ? `<span class="scorechip">Nota media <b>${df(st.mean, 2)} / ${st.hi}</b></span>` : '';
+      if (chips) chips.innerHTML = st.n
+        ? `<span class="scorechip">Nota media vs ${df(BENCH_RECOMENDACION, 1)} <b>${df(st.mean, 2)} / ${st.hi}</b>${benchPill(st.mean, BENCH_RECOMENDACION, df(BENCH_RECOMENDACION, 1), true)}</span>`
+        : '';
       if (!st.n) { if (host) host.hidden = true; return failIn(box, emptyMsg('Nadie puntúa esta pregunta con el filtro activo.')); }
       clearFail(box);
       const pD = pct(o.d, st.n), pP = pct(o.p, st.n), pR = pct(o.r, st.n);
@@ -4493,6 +4512,8 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
       const nota = DATA.kind[col6] === 'scale'
         ? scaleStats(VIEW, col6, DATA.scale[col6][0], DATA.scale[col6][1]) : { n: 0 };
       const inten = countAny(VIEW, Q.q6.col, KPI_INTENCION);
+      const reco = DATA.kind[Q.q9.col] === 'scale' && (DATA.scale[Q.q9.col] || [])[1] === 10
+        ? npsOf(VIEW, Q.q9.col) : null;
       const ready = LOAD === 'live';
 
       const kpi = (v, u, l, note, extra) => `<div class="kpi">
@@ -4511,7 +4532,12 @@ d119,Femenino,42,Sí,Redes sociales,10,9,7,9,8,9,10,10,Mejor,Compradores potenci
           nota.n ? benchPill(nota.mean, BENCH_NOTA, df(BENCH_NOTA, 1)) : '') +
         kpi(inten.base ? pf(inten.pct, 0) : '—', '', 'Comprarían',
           inten.base ? nf(inten.hit) + ' compradores potenciales de ' + nf(inten.base) : '',
-          inten.base ? benchPill(inten.pct, BENCH_INTEN, pf(BENCH_INTEN, 0)) : '');
+          inten.base ? benchPill(inten.pct, BENCH_INTEN, pf(BENCH_INTEN, 0)) : '') +
+        kpi(ready && reco && reco.st.n ? df(reco.st.mean, 2) : '—',
+          reco && reco.st.n ? '/' + reco.st.hi : '', 'Recomendación media',
+          reco && reco.st.n ? 'media de ' + nf(reco.st.n) + ' recomendaciones' : 'sin base suficiente',
+          reco && reco.st.n
+            ? benchPill(reco.st.mean, BENCH_RECOMENDACION, df(BENCH_RECOMENDACION, 1)) : '');
 
       /* Cierre: total de compradores potenciales de toda la muestra, sin filtros. */
       const ctaN = $('#cta-n');
